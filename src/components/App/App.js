@@ -1,12 +1,16 @@
 import Form from '../Form/Form';
 import './App.css';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 function App() {
     const [todos, setTodos] = useState([]); //состояние todo содержит пустой массив
     const [allTodos, setAllTodos] = useState(0);
     const [allComplete, setAllComplete] = useState(0);
 
+    useEffect(() => {
+      setAllComplete(todos.filter(todo => todo.done === true).length);
+    }, [todos]);
+    
     const putTodo = (value) => {  //функция
       if (value) {
         setTodos([...todos, {id: Date.now(), text: value, done: false}])
@@ -22,8 +26,6 @@ function App() {
         if (todo.id !== id) return todo;
          //прохожу по каждому туду, если его id и id li-шки не совпадают, возвращаем todo
          setAllComplete(allComplete + 1);
-         /*todos.filter(todo => todo.done === true).length*/
-         //как сделать чтобы состояние allComplete менялось после изменения параметра done у todo
          return {
           ...todo, done: !todo.done,  //если совпадают, возвращаем todo с пом. spread-оператора +
                                     //его поле done меняем на обратное (true/false) 
@@ -38,10 +40,6 @@ function App() {
       // функция filter создает новый массив исходя из переданного ему условия
       // новый массив содержит все элементы которые возвращают true из условия 
     }
-
-    /*const completeTodo = () => {
-      
-    }*/
 
     const clearTodos = () => {
       setTodos([]);
